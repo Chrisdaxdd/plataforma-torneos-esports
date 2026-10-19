@@ -1,0 +1,526 @@
+/* ==========================================================================
+   MAIN-ESPORTS.CSS — Dark Gaming / Esports Pro UI Theme
+   Inspirado en VLR.gg, FACEIT, Battlefy y Liquipedia
+   ========================================================================== */
+
+:root {
+    --bg-primary: #0d1117;
+    --bg-surface: #161b22;
+    --bg-elevated: #21262d;
+    --bg-glass: rgba(22, 27, 34, 0.82);
+
+    --accent-cyan: #00e5ff;
+    --accent-purple: #7928ca;
+    --status-win: #00f59b;
+    --status-danger: #ff3366;
+    --status-wait: #ffaa00;
+
+    --text-main: #f0f6fc;
+    --text-muted: #8b949e;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(0, 229, 255, 0.45);
+
+    --font-heading: 'Chakra Petch', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+}
+
+/* Base & Tipografía */
+body {
+    background-color: var(--bg-primary);
+    background-image:
+        radial-gradient(circle at 12% 10%, rgba(0, 229, 255, 0.07), transparent 30%),
+        radial-gradient(circle at 88% 15%, rgba(121, 40, 202, 0.09), transparent 32%);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding-top: 78px;
+}
+
+h1, h2, h3, h4, h5, h6, .esports-title {
+    font-family: var(--font-heading);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+/* Navbar Acrílica Fija */
+.esports-navbar {
+    background: rgba(13, 17, 23, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.55);
+}
+
+.brand-logo-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    color: #0d1117;
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+.role-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+}
+
+/* Tarjetas Glassmorphism & Superficies */
+.esports-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.esports-card-header {
+    background: rgba(13, 17, 23, 0.65);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0.85rem 1.15rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Fichas de Torneos Interactivas */
+.tournament-card {
+    background: linear-gradient(160deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tournament-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 28px rgba(0, 229, 255, 0.14);
+}
+
+.tournament-card.active-tournament {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 1px var(--accent-cyan), 0 8px 25px rgba(0, 229, 255, 0.18);
+}
+
+.tournament-card.active-tournament::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+}
+
+/* Barra de Progreso de Cupos */
+.quota-progress {
+    height: 8px;
+    background-color: #0d1117;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.quota-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--status-win));
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.quota-progress-bar.quota-full {
+    background: linear-gradient(90deg, var(--status-wait), var(--status-danger));
+}
+
+/* Etiquetas de Estado (Badges Pro) */
+.status-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+}
+
+.status-open {
+    background: rgba(0, 245, 155, 0.12);
+    color: var(--status-win);
+    border: 1px solid rgba(0, 245, 155, 0.35);
+}
+
+.status-live {
+    background: rgba(255, 170, 0, 0.14);
+    color: var(--status-wait);
+    border: 1px solid rgba(255, 170, 0, 0.4);
+}
+
+.status-closed {
+    background: rgba(255, 51, 102, 0.14);
+    color: var(--status-danger);
+    border: 1px solid rgba(255, 51, 102, 0.38);
+}
+
+/* Controles de Formulario Oscuros & Floating Labels */
+.form-control, .form-select {
+    background-color: var(--bg-primary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    color: var(--text-main) !important;
+    border-radius: 8px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.18) !important;
+    background-color: var(--bg-primary) !important;
+    color: #ffffff !important;
+}
+
+.form-floating > label {
+    color: var(--text-muted);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+    color: var(--accent-cyan);
+}
+
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+.form-floating > .form-select ~ label::after {
+    background-color: transparent !important;
+}
+
+/* Botones Esports con Microinteracciones Glow */
+.btn-esports-cyan {
+    background: linear-gradient(135deg, #00e5ff 0%, #00b4d8 100%);
+    color: #0d1117;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-esports-cyan:hover {
+    background: linear-gradient(135deg, #33ebff 0%, #00e5ff 100%);
+    color: #0d1117;
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+}
+
+.btn-esports-purple {
+    background: linear-gradient(135deg, #7928ca 0%, #5b189a 100%);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-esports-purple:hover {
+    background: linear-gradient(135deg, #9038e8 0%, #7928ca 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(121, 40, 202, 0.55);
+}
+
+.btn-esports-win {
+    background: linear-gradient(135deg, #00f59b 0%, #00c47c 100%);
+    color: #0d1117;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-esports-win:hover {
+    background: linear-gradient(135deg, #33f7af 0%, #00f59b 100%);
+    color: #0d1117;
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(0, 245, 155, 0.45);
+}
+
+/* ==========================================================================
+   CUADRO DE ELIMINACIÓN DIRECTA (BRACKET TREE UI CON CONECTORES CSS)
+   ========================================================================== */
+.bracket-tree-wrapper {
+    display: flex;
+    gap: 2.2rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+    align-items: stretch;
+}
+
+.bracket-round-col {
+    min-width: 310px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.bracket-round-header {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--accent-cyan);
+    border-radius: 8px;
+    padding: 0.55rem 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+}
+
+.bracket-matches-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-grow: 1;
+    gap: 1.25rem;
+}
+
+.match-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--accent-cyan);
+    border-radius: 10px;
+    padding: 0.9rem;
+    position: relative;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.match-card:hover {
+    border-color: rgba(0, 229, 255, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 229, 255, 0.12);
+}
+
+.match-card.match-validated {
+    border-left-color: var(--status-win);
+}
+
+/* Conectores CSS entre rondas del Bracket */
+.bracket-round-col:not(:last-child) .match-card::after {
+    content: "";
+    position: absolute;
+    right: -1.15rem;
+    top: 50%;
+    width: 1.15rem;
+    height: 2px;
+    background: rgba(0, 229, 255, 0.35);
+}
+
+.bracket-round-col:not(:first-child) .match-card::before {
+    content: "";
+    position: absolute;
+    left: -1.15rem;
+    top: 50%;
+    width: 1.15rem;
+    height: 2px;
+    background: rgba(0, 229, 255, 0.35);
+}
+
+.match-participant-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    margin-bottom: 0.35rem;
+    transition: all 0.2s ease;
+}
+
+.match-participant-row.winner-row {
+    background: rgba(0, 245, 155, 0.1);
+    border-color: rgba(0, 245, 155, 0.45);
+    color: var(--status-win);
+    font-weight: 700;
+}
+
+.match-score-box {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 28px;
+    text-align: center;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: var(--bg-elevated);
+    color: var(--text-main);
+}
+
+.winner-row .match-score-box {
+    background: var(--status-win);
+    color: #0d1117;
+}
+
+/* Tablas Striped Oscuras Pro */
+.table-esports {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.025);
+    --bs-table-hover-bg: rgba(0, 229, 255, 0.06);
+    --bs-table-color: var(--text-main);
+    --bs-table-border-color: var(--border-subtle);
+    margin-bottom: 0;
+}
+
+.table-esports thead th {
+    font-family: var(--font-heading);
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0.6rem 0.75rem;
+}
+
+/* Buscador Autocompletable y Chips de Plantilla */
+.search-wrapper {
+    position: relative;
+}
+
+.autocomplete-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 1080;
+    max-height: 230px;
+    overflow-y: auto;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+    display: none;
+}
+
+.autocomplete-item {
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.84rem;
+    transition: background-color 0.15s ease;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background-color: var(--bg-elevated);
+    color: var(--accent-cyan);
+}
+
+.chips-container {
+    min-height: 46px;
+    background-color: var(--bg-primary);
+    border: 1px dashed rgba(0, 229, 255, 0.35);
+    border-radius: 8px;
+    padding: 0.45rem 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+}
+
+.player-chip {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(121, 40, 202, 0.28));
+    border: 1px solid var(--accent-cyan);
+    color: var(--text-main);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.player-chip .remove-chip {
+    cursor: pointer;
+    background: rgba(255, 51, 102, 0.25);
+    color: var(--status-danger);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    line-height: 1;
+    transition: all 0.15s ease;
+}
+
+.player-chip .remove-chip:hover {
+    background: var(--status-danger);
+    color: #ffffff;
+}
+
+/* Alertas Neón */
+.alert-esports-win {
+    background: rgba(0, 245, 155, 0.1);
+    border: 1px solid var(--status-win);
+    color: var(--text-main);
+    border-radius: 10px;
+}
+
+.alert-esports-danger {
+    background: rgba(255, 51, 102, 0.12);
+    border: 1px solid var(--status-danger);
+    color: var(--text-main);
+    border-radius: 10px;
+}
+
+.champion-banner {
+    background: linear-gradient(135deg, rgba(121, 40, 202, 0.28) 0%, rgba(0, 245, 155, 0.18) 100%);
+    border: 1px solid var(--status-win);
+    border-radius: 12px;
+    box-shadow: 0 0 28px rgba(0, 245, 155, 0.18);
+}

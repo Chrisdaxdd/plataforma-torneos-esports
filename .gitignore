@@ -1,0 +1,26 @@
+# Carpetas de trabajo no relacionadas
+.metadata/
+AplicacionesEmpresariales/
+AplicacionesEmpresariales-1/
+Proyecto/
+Prub/
+prueba/
+prueba2/
+*.zip
+
+# Artefactos de compilación Maven
+**/target/
+target/
+
+# IDE Eclipse / STS
+**/.settings/
+**/.project
+**/.classpath
+.settings/
+.project
+.classpath
+
+# Logs y temporales
+*.log
+.DS_Store
+Thumbs.db

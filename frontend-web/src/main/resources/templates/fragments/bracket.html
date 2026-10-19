@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Fragmento del Cuadro de Eliminación Directa (Bracket Tree UI + Validación Arbitral) -->
+<div th:fragment="cuadroEliminacion" class="esports-card mb-4">
+    <div class="esports-card-header">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-diagram-3-fill fs-5" style="color: var(--accent-cyan);"></i>
+            <span class="esports-title fw-bold fs-6 text-white">
+                5. Cuadro de Eliminación Directa &amp; Validación Oficial Arbitral
+            </span>
+        </div>
+        <span class="status-badge status-open">
+            <i class="bi bi-database-check me-1"></i>db_matchmaking
+        </span>
+    </div>
+
+    <div class="p-3 p-lg-4">
+        <!-- Formulario para Generar Llaves Iniciales (Rol Organizador) con Buscador de Árbitro -->
+        <form th:if="${#lists.isEmpty(enfrentamientos)}" action="/matchmaking/generar" method="post"
+              class="row g-3 align-items-end mb-2 p-3 rounded"
+              style="background: var(--bg-primary); border: 1px dashed rgba(0, 229, 255, 0.35);">
+            <input type="hidden" name="torneoId" th:value="${torneoActual.id}">
+            <input type="hidden" name="nombreTorneo" th:value="${torneoActual.nombre}">
+
+            <div class="col-md-5">
+                <label class="form-label small fw-semibold" style="color: var(--status-wait);">
+                    <i class="bi bi-search me-1"></i>Árbitro Oficial Asignado (Buscador por Rol ARBITRO)
+                </label>
+                <div class="search-wrapper">
+                    <input type="text" name="arbitroNickname"
+                           class="form-control arbitro-search-input"
+                           placeholder="Escribe para buscar árbitro (ej. Ref_Pansy, Ref_Goldenboy)..."
+                           autocomplete="off" required>
+                    <div class="autocomplete-menu arbitro-suggestions"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small text-secondary">
+                    <i class="bi bi-calendar-event me-1"></i>Fecha / Horario de Ronda Inicial
+                </label>
+                <input type="text" name="horarioProgramado" class="form-control font-mono"
+                       placeholder="2026-08-06 16:00 UTC" value="2026-08-06 16:00 UTC" required>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-esports-cyan w-100 py-2">
+                    <i class="bi bi-lightning-charge-fill me-1"></i>Generar Llaves
+                </button>
+            </div>
+        </form>
+
+        <!-- Árbol de Eliminación Directa Conectado por Rondas -->
+        <div th:if="${!#lists.isEmpty(enfrentamientos)}" class="bracket-tree-wrapper">
+
+            <!-- Iteramos por las posibles rondas del torneo (1 a 4) mostrando solo las rondas que tienen llaves activas -->
+            <th:block th:each="numRonda : ${#numbers.sequence(1, 4)}">
+                <div class="bracket-round-col" th:if="${!#lists.isEmpty(enfrentamientos.?[ronda == __${numRonda}__])}">
+                    <div class="bracket-round-header">
+                        <i class="bi bi-trophy me-1"></i>
+                        <span th:text="${enfrentamientos.?[ronda == __${numRonda}__][0].nombreRonda}">RONDA</span>
+                        <span class="ms-1 opacity-75 font-mono" th:text="${'(R' + numRonda + ')'}"></span>
+                    </div>
+
+                    <div class="bracket-matches-stack">
+                        <div class="match-card"
+                             th:each="m : ${enfrentamientos.?[ronda == __${numRonda}__]}"
+                             th:classappend="${m.resultadoValidado} ? 'match-validated' : ''">
+
+                            <!-- Cabecera de la Ficha de Enfrentamiento -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="font-mono small fw-bold" style="color: var(--accent-cyan);"
+                                      th:text="${'LLAVE #' + m.numeroLlave}"></span>
+                                <span class="status-badge"
+                                      th:classappend="${m.resultadoValidado} ? 'status-open' : (${m.estado == 'PENDIENTE_RIVAL'} ? 'status-closed' : 'status-live')"
+                                      th:text="${m.estado}"></span>
+                            </div>
+
+                            <!-- Participante A -->
+                            <div class="match-participant-row"
+                                 th:classappend="${m.ganador != null and m.ganador == m.participanteA} ? 'winner-row' : ''">
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                    <i class="bi"
+                                       th:classappend="${m.ganador != null and m.ganador == m.participanteA} ? 'bi-trophy-fill' : 'bi-shield-shaded text-secondary'"></i>
+                                    <span th:text="${m.participanteA}"></span>
+                                </div>
+                                <span class="match-score-box" th:text="${m.puntajeA != null ? m.puntajeA : '-'}"></span>
+                            </div>
+
+                            <!-- Participante B -->
+                            <div class="match-participant-row"
+                                 th:classappend="${m.ganador != null and m.ganador == m.participanteB} ? 'winner-row' : ''">
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                    <i class="bi"
+                                       th:classappend="${m.ganador != null and m.ganador == m.participanteB} ? 'bi-trophy-fill' : 'bi-shield-shaded text-secondary'"></i>
+                                    <span th:text="${m.participanteB}"></span>
+                                </div>
+                                <span class="match-score-box" th:text="${m.puntajeB != null ? m.puntajeB : '-'}"></span>
+                            </div>
+
+                            <!-- Metadatos del Enfrentamiento -->
+                            <div class="d-flex justify-content-between align-items-center small text-secondary mt-2 pt-1 border-top"
+                                 style="border-color: var(--border-subtle) !important; font-size: 0.76rem;">
+                                <span>
+                                    <i class="bi bi-person-check text-info me-1"></i>
+                                    <strong class="text-light" th:text="${m.arbitroNickname}"></strong>
+                                </span>
+                                <span class="font-mono">
+                                    <i class="bi bi-clock me-1"></i><span th:text="${m.horarioProgramado}"></span>
+                                </span>
+                            </div>
+
+                            <div th:if="${m.incidencias != null and !#strings.isEmpty(m.incidencias)}"
+                                 class="small mt-1 px-2 py-1 rounded"
+                                 style="background: rgba(255, 170, 0, 0.12); color: var(--status-wait); font-size: 0.75rem;">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                <span th:text="${m.incidencias}"></span>
+                            </div>
+
+                            <!-- Panel de Acción Rápida para Validación del Árbitro -->
+                            <form th:if="${!m.resultadoValidado and m.participanteA != 'POR_DEFINIR' and m.participanteB != 'POR_DEFINIR'}"
+                                  th:action="@{/matchmaking/validar/{id}(id=${m.id})}" method="post"
+                                  class="mt-2 pt-2 border-top" style="border-color: var(--border-subtle) !important;">
+                                <input type="hidden" name="torneoId" th:value="${torneoActual.id}">
+                                <div class="row g-1">
+                                    <div class="col-3">
+                                        <input type="number" min="0" name="puntajeA"
+                                               class="form-control form-control-sm font-mono text-center"
+                                               placeholder="A" title="Puntaje Participante A" required>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" min="0" name="puntajeB"
+                                               class="form-control form-control-sm font-mono text-center"
+                                               placeholder="B" title="Puntaje Participante B" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="search-wrapper">
+                                            <input type="text" name="arbitroNickname"
+                                                   class="form-control form-control-sm arbitro-search-input"
+                                                   th:value="${m.arbitroNickname}"
+                                                   placeholder="Árbitro..."
+                                                   autocomplete="off" required>
+                                            <div class="autocomplete-menu arbitro-suggestions"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-7 mt-1">
+                                        <input type="text" name="incidencias"
+                                               class="form-control form-control-sm"
+                                               placeholder="Reporte / Incidencias">
+                                    </div>
+                                    <div class="col-5 mt-1">
+                                        <select name="validarOficialmente" class="form-select form-select-sm">
+                                            <option value="true" selected>Validar Oficial</option>
+                                            <option value="false">Preliminar</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <button type="submit" class="btn btn-sm btn-esports-win w-100 py-1">
+                                            <i class="bi bi-check2-circle me-1"></i>Validar Resultado y Avanzar Ronda
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
